@@ -5,7 +5,7 @@ import numpy as np
 OUT_FORMAT = 'jpg'
 OUT_SIZE_Y = 100
 OUT_SIZE_X = 50
-STEP = 200
+STEP = 300
 
 MAIN_VIDEO_PATH = './videos/'
 VIDEO = 'ESPIRAL_MAGICA.webm'
@@ -36,7 +36,8 @@ def iterate_video(MAIN_VIDEO_PATH,VIDEO,FOLDER_SAVE,STEP,OUT_FORMAT):
 
         if count_frame % STEP == 0:
             cv2.imshow('Frame', frame)
-            output_filename = str(FOLDER_SAVE+'/'+'frame_{}'.format(count_frame)+'.{}'.format(OUT_FORMAT))
+            in_name = '.'.join(VIDEO.split('.')[:-1])
+            output_filename = str(FOLDER_SAVE+'/'+in_name+'_frame_{}'.format(count_frame)+'.{}'.format(OUT_FORMAT))
             print(output_filename)
 
             frame = convert_size(frame,OUT_SIZE_X,OUT_SIZE_Y)
