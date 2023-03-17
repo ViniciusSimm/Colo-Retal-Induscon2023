@@ -1,28 +1,23 @@
 import tensorflow as tf
+import pandas as pd
+import numpy as np
+import os
+import cv2
+from complement_functions import *
+
 IMG_HEIGHT = 288
 IMG_WIDTH= 384
 IMG_CHANNELS = 3
 num_classes = 3
 
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-SEG'],0.2)
+X = get_files(images_train)
+y = get_files(masks_train)
+X_v = get_files(images_test)
+y_v = get_files(masks_test)
 
-import pandas as pd
-import numpy as np
-import os
-import cv2
-
-
-def get_files(path):
-    all_images = []
-    for image_path in os.listdir(path):
-        name = str(path+'/'+image_path)
-        img = cv2.imread(name)
-        all_images.append(img)
-
-    x_train = np.array(all_images)
-    return x_train
-
-X = get_files('./datasets/CVC-ClinicDB/images')
-y = get_files('./datasets/CVC-ClinicDB/masks')
+# X = get_files('./datasets/CVC-ClinicDB/images')
+# y = get_files('./datasets/CVC-ClinicDB/masks')
 
 
 inputs = tf.keras.layers.Input((IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS))
@@ -95,7 +90,7 @@ callbacks = [
         tf.keras.callbacks.EarlyStopping(patience=2, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs')]
 
-model.fit(X, y, batch_size=16, epochs=25, callbacks=callbacks)
+model.fit(X, y, validation_data=(X_v,y_v), batch_size=16, epochs=5, callbacks=callbacks)
 
 
 
