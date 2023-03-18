@@ -8,16 +8,46 @@ from complement_functions import *
 IMG_HEIGHT = 288
 IMG_WIDTH= 384
 IMG_CHANNELS = 3
-num_classes = 1
+num_classes = 3
 
 images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-SEG'],0.2)
-X = get_files(images_train,type_of_file='image')
-y = get_files(masks_train,type_of_file='mask')
-X_v = get_files(images_test,type_of_file='image')
-y_v = get_files(masks_test,type_of_file='mask')
+X = get_files(images_train)
+y = get_files(masks_train)
+X_v = get_files(images_test)
+y_v = get_files(masks_test)
 
-print('X', X.shape, 'y', y.shape, 'X_v', X.shape, 'y_v', y_v.shape)
+# def block_conv(in_layer,filters,kernel=(3,3),padding='same',dropout=0.1):
+#         c1 = tf.keras.layers.Conv2D(filters, kernel, activation='relu', kernel_initializer='he_normal', padding=padding)(in_layer)
+#         c1 = tf.keras.layers.Dropout(dropout)(c1)
+#         c1 = tf.keras.layers.Conv2D(filters, kernel, activation='relu', kernel_initializer='he_normal', padding=padding)(c1)
+#         b1 = tf.keras.layers.BatchNormalization()(c1)
+#         r1 = tf.keras.layers.ReLU()(b1)
+#         return r1
 
+# def block_up(in_layer,pair_block,filters,matrix=(2,2), strides=(2, 2), padding='same'):
+#         u6 = tf.keras.layers.Conv2DTranspose(filters, matrix, strides=strides, padding=padding)(in_layer)
+#         u6 = tf.keras.layers.concatenate([u6, pair_block])
+#         u6 = tf.keras.layers.BatchNormalization()(u6)
+#         u6 = tf.keras.layers.ReLU()(u6)
+#         return u6
+
+
+# r1 = block_conv(input,16)
+# p1 = tf.keras.layers.MaxPooling2D((2, 2))(r1)
+# r2 = block_conv(p1,32)
+# p2 = tf.keras.layers.MaxPooling2D((2, 2))(r2)
+# r3 = block_conv(p2,64)
+# p3 = tf.keras.layers.MaxPooling2D((2, 2))(r3)
+# r4 = block_conv(p3,128)
+# p4 = tf.keras.layers.MaxPooling2D((2, 2))(r4)
+
+# c5 = tf.keras.layers.Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same')(p4)
+# b5 = tf.keras.layers.BatchNormalization()(c5)
+# r5 = tf.keras.layers.ReLU()(b5)
+# c5 = tf.keras.layers.Dropout(0.3)(r5)
+# c5 = tf.keras.layers.Conv2D(256, (3, 3), activation='relu', kernel_initializer='he_normal', padding='same')(c5)
+
+# u6 = block_up(c5,r4,filters,matrix=(2,2), strides=(2, 2), padding='same')
 
 inputs = tf.keras.layers.Input((IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS))
 

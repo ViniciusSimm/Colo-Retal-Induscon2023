@@ -4,10 +4,12 @@ import cv2
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-def get_files(paths):
+def get_files(paths,type_of_file='image'):
     all_images = []
     for path in paths:
         img = cv2.imread(path)
+        if type_of_file == 'mask':
+            img = img[:,:,0]
         all_images.append(img)
     arrays = np.array(all_images)
     return arrays
