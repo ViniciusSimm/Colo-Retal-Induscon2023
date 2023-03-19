@@ -5,6 +5,16 @@ import os
 import cv2
 from complement_functions import *
 
+import numpy as np 
+import os
+import skimage.io as io
+import skimage.transform as trans
+import numpy as np
+from keras.models import *
+from keras.layers import *
+from keras.optimizers import *
+from keras.callbacks import ModelCheckpoint, LearningRateScheduler
+from keras import backend as keras
 
 IMG_HEIGHT = 288
 IMG_WIDTH= 384
@@ -82,19 +92,20 @@ outputs = tf.keras.layers.Conv2D(num_classes, (1, 1), activation='sigmoid')(u9)
 
 model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
 
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-
 callbacks = [
         # tf.keras.callbacks.EarlyStopping(patience=2, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs')]
 
+model.compile(optimizer = Adam(lr = 1e-4), loss = 'binary_crossentropy', metrics = ['accuracy'])
+
+
 # O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA
-model.fit(X, y, batch_size=16, epochs=10, callbacks=callbacks)
+model.fit(X, y, batch_size=16, epochs=15)
 
 # validation_data=(X_v,y_v)
 
 print(model.summary())
 
-model.save('./models/sigmoid.h5')
+model.save('./models/third.h5')
 print('Model Saved!')
 
