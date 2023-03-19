@@ -4,12 +4,25 @@ import cv2
 import numpy as np
 from sklearn.model_selection import train_test_split
 
+# def get_files(paths,type_of_file='image'):
+#     all_images = []
+#     for path in paths:
+#         img = cv2.imread(path)
+#         if type_of_file == 'mask':
+#             img = img[:,:,0]
+#         all_images.append(img)
+#     arrays = np.array(all_images)
+#     return arrays
+
 def get_files(paths,type_of_file='image'):
     all_images = []
     for path in paths:
-        img = cv2.imread(path)
-        if type_of_file == 'mask':
-            img = img[:,:,0]
+        if type_of_file == 'image':
+            img = cv2.imread(path)
+        elif type_of_file == 'mask':
+            img_gray = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+            ret,img = cv2.threshold(img_gray,127,255,cv2.THRESH_BINARY)
+            
         all_images.append(img)
     arrays = np.array(all_images)
     return arrays
@@ -37,3 +50,17 @@ def get_folders(list_folders,test_size):
 
     return images_train, images_test, masks_train, masks_test
 
+import numpy as np
+
+def count_pixel_intensity(array):
+    # Transforma o array em um array unidimensional
+    flat_array = array.ravel()
+    
+    # Cria um vetor de 256 zeros para armazenar a contagem de pixels de cada intensidade
+    count = np.zeros(256, dtype=np.int32)
+    
+    # Percorre o array unidimensional e conta a quantidade de pixels de cada intensidade
+    for i in range(256):
+        count[i] = np.sum(flat_array == i)
+    
+    return count

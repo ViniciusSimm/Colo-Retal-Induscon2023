@@ -5,17 +5,17 @@ import os
 import cv2
 from complement_functions import *
 
+
 IMG_HEIGHT = 288
 IMG_WIDTH= 384
 IMG_CHANNELS = 3
 num_classes = 1
 
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-SEG','sessile-main-Kvasir-SEG'],0.1)
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB'],0.1)
 X = get_files(images_train,type_of_file='image')
 y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
 y_v = get_files(masks_test,type_of_file='mask')
-
 
 inputs = tf.keras.layers.Input((IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS))
 
@@ -77,10 +77,11 @@ u9 = tf.keras.layers.concatenate([u9, c1], axis=3)
 u9 = tf.keras.layers.BatchNormalization()(u9)
 u9 = tf.keras.layers.ReLU()(u9)
 
- 
+
 outputs = tf.keras.layers.Conv2D(num_classes, (1, 1), activation='sigmoid')(u9)
 
 model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
+
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 callbacks = [
@@ -88,9 +89,12 @@ callbacks = [
         tf.keras.callbacks.TensorBoard(log_dir='logs')]
 
 # O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA
-model.fit(X, y, validation_data=(X_v,y_v), batch_size=16, epochs=30, callbacks=callbacks)
+model.fit(X, y, batch_size=16, epochs=10, callbacks=callbacks)
+
+# validation_data=(X_v,y_v)
 
 print(model.summary())
 
-model.save('./models/second.h5')
+model.save('./models/sigmoid.h5')
 print('Model Saved!')
+
