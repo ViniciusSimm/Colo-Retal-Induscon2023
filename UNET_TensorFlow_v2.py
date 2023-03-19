@@ -10,7 +10,7 @@ IMG_WIDTH= 384
 IMG_CHANNELS = 3
 num_classes = 1
 
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB',],0.2)
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-SEG','sessile-main-Kvasir-SEG'],0.1)
 X = get_files(images_train,type_of_file='image')
 y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
@@ -84,12 +84,13 @@ model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 callbacks = [
-        tf.keras.callbacks.EarlyStopping(patience=2, monitor='val_loss'),
+        # tf.keras.callbacks.EarlyStopping(patience=2, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs')]
 
-model.fit(X, y, validation_data=(X_v,y_v), batch_size=16, epochs=5, callbacks=callbacks)
+# O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA
+model.fit(X, y, validation_data=(X_v,y_v), batch_size=16, epochs=30, callbacks=callbacks)
 
 print(model.summary())
 
-model.save('./models/test.h5')
+model.save('./models/second.h5')
 print('Model Saved!')
