@@ -7,9 +7,12 @@ from sklearn.model_selection import train_test_split
 # def get_files(paths,type_of_file='image'):
 #     all_images = []
 #     for path in paths:
-#         img = cv2.imread(path)
-#         if type_of_file == 'mask':
-#             img = img[:,:,0]
+#         if type_of_file == 'image':
+#             img = cv2.imread(path)
+#         elif type_of_file == 'mask':
+#             img_gray = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+#             ret,img = cv2.threshold(img_gray,127,255,cv2.THRESH_BINARY)
+            
 #         all_images.append(img)
 #     arrays = np.array(all_images)
 #     return arrays
@@ -19,9 +22,15 @@ def get_files(paths,type_of_file='image'):
     for path in paths:
         if type_of_file == 'image':
             img = cv2.imread(path)
+            img = img.astype('float32') / 255.0
+            
         elif type_of_file == 'mask':
-            img_gray = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-            ret,img = cv2.threshold(img_gray,127,255,cv2.THRESH_BINARY)
+            mask = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+            mask = mask.astype('float32') / 255.0
+            _, img = cv2.threshold(mask, 0.5, 1.0, cv2.THRESH_BINARY)
+            # kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+            # mask = cv2.erode(mask, kernel, iterations=1)
+            # mask = cv2.dilate(mask, kernel, iterations=1)
             
         all_images.append(img)
     arrays = np.array(all_images)

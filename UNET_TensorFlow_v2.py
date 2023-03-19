@@ -96,6 +96,7 @@ callbacks = [
         # tf.keras.callbacks.EarlyStopping(patience=2, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs')]
 
+
 model.compile(optimizer = Adam(lr = 1e-4), loss = 'binary_crossentropy', metrics = ['accuracy'])
 
 
@@ -106,6 +107,6 @@ model.fit(X, y, batch_size=16, epochs=15)
 
 print(model.summary())
 
-model.save('./models/third.h5')
+model.save('./models/threshold.h5')
 print('Model Saved!')
 
