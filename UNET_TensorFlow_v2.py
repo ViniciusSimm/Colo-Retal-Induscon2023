@@ -15,13 +15,14 @@ from keras.layers import *
 from keras.optimizers import *
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
+from keras.backend import epsilon
 
 IMG_HEIGHT = 288
 IMG_WIDTH= 384
 IMG_CHANNELS = 3
 num_classes = 1
 
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB'],0.1)
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-SEG'],0.1)
 X = get_files(images_train,type_of_file='image')
 y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
@@ -89,6 +90,8 @@ u9 = tf.keras.layers.ReLU()(u9)
 
 
 outputs = tf.keras.layers.Conv2D(num_classes, (1, 1), activation='sigmoid')(u9)
+# outputs = tf.keras.layers.Lambda(apply_threshold)(outputs)
+outputs = ThresholdLayer()(outputs)
 
 model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
 
@@ -97,16 +100,18 @@ callbacks = [
         tf.keras.callbacks.TensorBoard(log_dir='logs')]
 
 
-model.compile(optimizer = Adam(lr = 1e-4), loss = 'binary_crossentropy', metrics = ['accuracy'])
+# model.compile(optimizer = Adam(lr = 1e-4), loss = focal_loss(alpha=0.25, gamma=6.0), metrics = ['accuracy'])
+model.compile(optimizer = Adam(lr = 1e-4), loss = dice_loss, metrics = ['accuracy'])
+# model.compile(optimizer = Adam(lr = 1e-4), loss = 'binary_crossentropy', metrics = ['accuracy'])
 
 
 # O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA
-model.fit(X, y, batch_size=16, epochs=15)
+model.fit(X, y, validation_data=(X_v,y_v), batch_size=8, epochs=30)
 
 # validation_data=(X_v,y_v)
 
 print(model.summary())
 
-model.save('./models/threshold.h5')
+model.save('./models/threshold_dice_loss_w_threshold_w_validation.h5')
 print('Model Saved!')
 
