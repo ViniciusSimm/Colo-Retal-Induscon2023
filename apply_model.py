@@ -1,31 +1,33 @@
 import cv2
 from complement_functions import *
 import tensorflow as tf
+import numpy as np
+from matplotlib import pyplot as plt
 
-paths = ['./datasets/CVC-ClinicDB/images/248.jpg']
-model_name = 'threshold_dice_loss.h5'
+#######################################################
+FOLDER = 'CVC-ClinicDB'
+FILE = '500.jpg'
+MODEL_NAME = 'threshold_dice_loss_w_threshold_v2.h5'
+#######################################################
 
+path_img = './datasets/{}/images/{}'.format(FOLDER,FILE)
+path_mask = './datasets/{}/masks/{}'.format(FOLDER,FILE)
+
+for i in [path_img,path_mask]:
+    img = cv2.imread(i)
+    cv2.imshow(i,img)
 
 # LOAD MODEL
-model = tf.keras.models.load_model('./models/{}'.format(model_name))
+model = tf.keras.models.load_model('./models/{}'.format(MODEL_NAME),custom_objects={'dice_loss':dice_loss,'ThresholdLayer': ThresholdLayer})
+
+array = get_files([path_img],type_of_file='image')
+prediction = model.predict(array)
+
+binario = np.where(prediction > 0.5, 1, 0)
+
+plt.imshow(prediction[0], interpolation='nearest')
+plt.show()
 
 
-# for path in paths:
-#     img = cv2.imread(path)
-#     cv2.imshow(path,img)
-
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
-
-# array = get_files(paths,type_of_file='image')
-# prediction = model.predict(array)
-
-# print(prediction)
-
-# binario = np.where(prediction > 0.5, 1, 0) * 255.0
-
-# print(binario)
-
-# from matplotlib import pyplot as plt
-# plt.imshow(binario[0], interpolation='nearest')
-# plt.show()
+cv2.waitKey(0)
+cv2.destroyAllWindows()
