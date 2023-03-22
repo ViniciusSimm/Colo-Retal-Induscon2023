@@ -6,18 +6,34 @@ from sklearn.model_selection import train_test_split
 import tensorflow as tf
 from keras.backend import epsilon
 
-# def get_files(paths,type_of_file='image'):
-#     all_images = []
-#     for path in paths:
-#         if type_of_file == 'image':
-#             img = cv2.imread(path)
-#         elif type_of_file == 'mask':
-#             img_gray = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-#             ret,img = cv2.threshold(img_gray,127,255,cv2.THRESH_BINARY)
-            
-#         all_images.append(img)
-#     arrays = np.array(all_images)
-#     return arrays
+def score_ssim(arrays_predict,arrays_mask):
+    ssim = tf.image.ssim(arrays_mask, arrays_predict, max_val=1.0)
+    return ssim.numpy().mean()
+
+def score_mse(arrays_predict,arrays_mask):
+    mse = np.mean((arrays_predict - arrays_mask) ** 2)
+    return mse
+
+def score_jaccard(arrays_predict,arrays_mask):
+    intersection = np.logical_and(arrays_predict,arrays_mask).sum()
+    union = np.logical_or(arrays_predict,arrays_mask).sum()
+    jaccard_index = intersection / union
+    return jaccard_index
+
+def score_euclidean(arrays_predict,arrays_mask):
+    euclidean_distance = np.sqrt(np.sum((arrays_predict - arrays_mask) ** 2))
+    return euclidean_distance
+
+def confusion_matrix(arrays_predict,arrays_mask):
+    true_positive = np.logical_and(arrays_mask, arrays_predict).sum()
+    false_positive = np.logical_and(1 - arrays_mask, arrays_predict).sum()
+    false_negative = np.logical_and(arrays_mask, 1 - arrays_predict).sum()
+    true_negative = np.logical_and(1 - arrays_mask, 1 - arrays_predict).sum()
+    # out of all the positive predicted, what percentage is truly positive
+    precision = true_positive / (true_positive + false_positive)
+    # out of the total positive, what percentage are predicted positive
+    recall = true_positive / (true_positive + false_negative)
+    return precision,recall
 
 def get_files(paths,type_of_file='image'):
     all_images = []
@@ -60,8 +76,6 @@ def get_folders(list_folders,test_size):
         images_full_list,masks_full_list,test_size=test_size,random_state=42)
 
     return images_train, images_test, masks_train, masks_test
-
-import numpy as np
 
 def count_pixel_intensity(array):
     # Transforma o array em um array unidimensional
