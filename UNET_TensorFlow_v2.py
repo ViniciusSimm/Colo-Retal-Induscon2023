@@ -22,7 +22,7 @@ IMG_WIDTH= 384
 IMG_CHANNELS = 3
 num_classes = 1
 
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-SEG'],0.1)
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB'],0.1)
 X = get_files(images_train,type_of_file='image')
 y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
