@@ -119,7 +119,7 @@ model.compile(optimizer = Adam(lr = 1e-4), loss = dice_loss, metrics = ['accurac
 
 
 # O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA
-model.fit(X, y, validation_data=(X_v,y_v), batch_size=16, epochs=20)
+model.fit(X, y, validation_data=(X_v,y_v), batch_size=4, epochs=20)
 
 # validation_data=(X_v,y_v)
 
