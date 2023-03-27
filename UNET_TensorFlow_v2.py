@@ -22,7 +22,20 @@ IMG_WIDTH= 384
 IMG_CHANNELS = 3
 num_classes = 1
 
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB'],0.1)
+# gpus = tf.config.list_physical_devices('GPU')
+# if gpus:
+#   # Restrict TensorFlow to only allocate 1GB of memory on the first GPU
+#   try:
+#     tf.config.set_logical_device_configuration(
+#         gpus[0],
+#         [tf.config.LogicalDeviceConfiguration(memory_limit=1024*4)])
+#     logical_gpus = tf.config.list_logical_devices('GPU')
+#     print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+#   except RuntimeError as e:
+#     # Virtual devices must be set before GPUs have been initialized
+#     print(e)
+
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-SEG'],0.1)
 X = get_files(images_train,type_of_file='image')
 y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
@@ -71,7 +84,7 @@ u6 = tf.keras.layers.concatenate([u6, c4])
 u6 = tf.keras.layers.BatchNormalization()(u6)
 u6 = tf.keras.layers.ReLU()(u6)
 
- 
+
 u7 = tf.keras.layers.Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same')(u6)
 u7 = tf.keras.layers.concatenate([u7, c3])
 u7 = tf.keras.layers.BatchNormalization()(u7)
@@ -106,12 +119,12 @@ model.compile(optimizer = Adam(lr = 1e-4), loss = dice_loss, metrics = ['accurac
 
 
 # O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA
-model.fit(X, y, validation_data=(X_v,y_v), batch_size=8, epochs=30)
+model.fit(X, y, validation_data=(X_v,y_v), batch_size=16, epochs=20)
 
 # validation_data=(X_v,y_v)
 
 print(model.summary())
 
-model.save('./models/threshold_dice_loss_w_threshold_w_validation.h5')
+model.save('./models/test_limit_gpu.h5')
 print('Model Saved!')
 

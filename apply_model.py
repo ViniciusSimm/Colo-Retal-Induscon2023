@@ -5,9 +5,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 #######################################################
-FOLDER = 'CVC-ClinicDB'
-FILE = '500.jpg'
-MODEL_NAME = 'threshold_dice_loss_w_threshold_w_validation.h5'
+FOLDER = 'Kvasir-SEG'
+FILE = 'cju306x7w05nb0835cunv799x.jpg'
+MODEL_NAME = 'test.h5'
 #######################################################
 
 path_img = './datasets/{}/images/{}'.format(FOLDER,FILE)
@@ -25,9 +25,8 @@ prediction = model.predict(array)
 
 binario = np.where(prediction > 0.5, 1, 0)
 
-plt.imshow(prediction[0], interpolation='nearest')
+plt.imshow(binario[0], interpolation='nearest')
 plt.show()
-
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
