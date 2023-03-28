@@ -5,17 +5,17 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 #######################################################
-FOLDER = 'Kvasir-SEG'
-FILE = 'cju306x7w05nb0835cunv799x.jpg'
-MODEL_NAME = 'test.h5'
+FOLDER = 'CVC-ClinicDB'
+FILE = '600.jpg'
+MODEL_NAME = 'tryout_v1.h5'
 #######################################################
 
 path_img = './datasets/{}/images/{}'.format(FOLDER,FILE)
 path_mask = './datasets/{}/masks/{}'.format(FOLDER,FILE)
 
-for i in [path_img,path_mask]:
-    img = cv2.imread(i)
-    cv2.imshow(i,img)
+# for i in [path_img,path_mask]:
+    # img = cv2.imread(i)
+    # cv2.imshow(i,img)
 
 # LOAD MODEL
 model = tf.keras.models.load_model('./models/{}'.format(MODEL_NAME),custom_objects={'dice_loss':dice_loss,'ThresholdLayer': ThresholdLayer})

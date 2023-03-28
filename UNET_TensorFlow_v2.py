@@ -17,8 +17,8 @@ from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
 from keras.backend import epsilon
 
-IMG_HEIGHT = 288
-IMG_WIDTH= 384
+IMG_HEIGHT = 256
+IMG_WIDTH= 256
 IMG_CHANNELS = 3
 num_classes = 1
 
@@ -35,7 +35,7 @@ num_classes = 1
 #     # Virtual devices must be set before GPUs have been initialized
 #     print(e)
 
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-SEG'],0.1)
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-recortado','Children_NoPolip','sessile-main-Kvasir-SEG','Kvasir-SEG'],0.05)
 X = get_files(images_train,type_of_file='image')
 y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
@@ -109,8 +109,9 @@ outputs = ThresholdLayer()(outputs)
 model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
 
 callbacks = [
-        # tf.keras.callbacks.EarlyStopping(patience=2, monitor='val_loss'),
-        tf.keras.callbacks.TensorBoard(log_dir='logs')]
+        tf.keras.callbacks.EarlyStopping(patience=3, monitor='val_loss'),
+        tf.keras.callbacks.TensorBoard(log_dir='logs')
+        ]
 
 
 # model.compile(optimizer = Adam(lr = 1e-4), loss = focal_loss(alpha=0.25, gamma=6.0), metrics = ['accuracy'])
@@ -119,12 +120,12 @@ model.compile(optimizer = Adam(lr = 1e-4), loss = dice_loss, metrics = ['accurac
 
 
 # O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA
-model.fit(X, y, validation_data=(X_v,y_v), batch_size=4, epochs=20)
+model.fit(X, y, validation_data=(X_v,y_v), batch_size=6, epochs=35)
 
 # validation_data=(X_v,y_v)
 
 print(model.summary())
 
-model.save('./models/test_limit_gpu.h5')
+model.save('./models/tryout_v1.h5')
 print('Model Saved!')
 

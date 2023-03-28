@@ -3,14 +3,14 @@ import cv2
 import pandas as pd
 import tifffile
 
-IN_FORMAT = 'jpg'
+IN_FORMAT = 'tif'
 OUT_FORMAT = 'jpg'
 
 OUT_SIZE_X = 256
 OUT_SIZE_Y = 256
 
 MAIN_DATASET_PATH = './datasets/'
-FOLDER = 'Kvasir-recortado'
+FOLDER = 'CVC-ClinicDB'
 
 def get_files_from_folder(FOLDER):
     folder_path = os.path.join(MAIN_DATASET_PATH, FOLDER)
