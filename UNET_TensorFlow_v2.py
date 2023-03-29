@@ -20,12 +20,15 @@ from keras.backend import epsilon
 
 # PARAMETERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-NAME_MODEL = 'test_checkpoint'
+NAME_MODEL = 'unet_model_v1'
 
 IMG_HEIGHT = 256
 IMG_WIDTH= 256
 IMG_CHANNELS = 3
 num_classes = 1
+
+EPOCHS = 15
+BATCH_SIZE = 6
 
 # PARAMETERS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -156,7 +159,9 @@ callbacks = [
 # CREATE OR LOAD MODEL >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 if os.path.isfile(model_path):
-    model = tf.keras.models.load_model(model_path)
+    # model = tf.keras.models.load_model(model_path)
+    model = tf.keras.models.load_model(model_path,custom_objects={'dice_loss':dice_loss,'ThresholdLayer': ThresholdLayer})
+
 else:
     model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
     model.compile(optimizer = Adam(lr = 1e-4), loss = dice_loss, metrics = ['accuracy'])
@@ -166,7 +171,7 @@ else:
 
 # TRAIN >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-history = model.fit(X, y, validation_data=(X_v,y_v), batch_size=6, epochs=35, callbacks=callbacks)
+history = model.fit(X, y, validation_data=(X_v,y_v), batch_size=BATCH_SIZE, epochs=EPOCHS, callbacks=callbacks)
 
 # TRAIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

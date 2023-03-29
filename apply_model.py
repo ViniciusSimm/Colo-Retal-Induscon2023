@@ -5,9 +5,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 #######################################################
-FOLDER = 'CVC-ClinicDB'
-FILE = '600.jpg'
-MODEL_NAME = 'test_checkpoint'
+FOLDER = 'Kvasir-recortado'
+FILE = 'cju0qkwl35piu0993l0dewei2.jpg'
+MODEL_NAME = 'unet_model_v1'
 #######################################################
 
 model_name = '{}.h5'.format(MODEL_NAME)
@@ -31,10 +31,10 @@ binario = np.where(prediction > 0.5, 1, 0)
 plt.imshow(binario[0], interpolation='nearest')
 plt.show()
 
-history_table = pd.read_csv(history_name)
-history_class = GetHistory(history_table)
-history_class.accuracy_vs_val_accuracy()
-history_class.loss_vs_val_loss()
+# history_table = pd.read_csv(history_name)
+# history_class = GetHistory(history_table)
+# history_class.accuracy_vs_val_accuracy()
+# history_class.loss_vs_val_loss()
 
 
 cv2.waitKey(0)
