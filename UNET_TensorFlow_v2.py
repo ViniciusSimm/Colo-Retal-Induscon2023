@@ -17,7 +17,7 @@ from keras.callbacks import ModelCheckpoint, LearningRateScheduler,CSVLogger
 from keras import backend as keras
 from keras.backend import epsilon
 
-NAME_MODEL = 'test_history'
+NAME_MODEL = 'test_checkpoint'
 
 IMG_HEIGHT = 256
 IMG_WIDTH= 256
@@ -39,12 +39,19 @@ num_classes = 1
 
 images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB',
                                                                 #   'Kvasir-recortado','Children_NoPolip','sessile-main-Kvasir-SEG','Kvasir-SEG'
-                                                                  ],0.05)
+                                                                  ],0.1)
 X = get_files(images_train,type_of_file='image')
 y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
 y_v = get_files(masks_test,type_of_file='mask')
 history_logger=tf.keras.callbacks.CSVLogger("./history/{}.csv".format(NAME_MODEL), separator=",", append=True)
+model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+    filepath='./tmp/checkpoint',
+    save_weights_only=True,
+    monitor='val_loss',
+    mode='min',
+    save_best_only=True)
+
 
 inputs = tf.keras.layers.Input((IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS))
 
@@ -116,8 +123,8 @@ model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
 callbacks = [
         tf.keras.callbacks.EarlyStopping(patience=3, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs'),
-        # tf.keras.callbacks.History(),
-        history_logger
+        history_logger,
+        model_checkpoint_callback
         ]
 
 
@@ -126,11 +133,13 @@ model.compile(optimizer = Adam(lr = 1e-4), loss = dice_loss, metrics = ['accurac
 # model.compile(optimizer = Adam(lr = 1e-4), loss = 'binary_crossentropy', metrics = ['accuracy'])
 
 
-# O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA
-history = model.fit(X, y, validation_data=(X_v,y_v), batch_size=6, epochs=4)
+# O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA   
+history = model.fit(X, y, validation_data=(X_v,y_v), batch_size=6, epochs=5, callbacks=callbacks)
 
 # validation_data=(X_v,y_v)
 
+
+model.load_weights('./tmp/checkpoint')
 print(model.summary())
 print(history)
 
