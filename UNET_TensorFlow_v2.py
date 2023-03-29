@@ -38,7 +38,7 @@ num_classes = 1
 #     print(e)
 
 images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB',
-                                                                #   'Kvasir-recortado','Children_NoPolip','sessile-main-Kvasir-SEG','Kvasir-SEG'
+                                                                  'Kvasir-recortado','Children_NoPolip','sessile-main-Kvasir-SEG','Kvasir-SEG'
                                                                   ],0.1)
 X = get_files(images_train,type_of_file='image')
 y = get_files(masks_train,type_of_file='mask')
@@ -121,7 +121,7 @@ outputs = ThresholdLayer()(outputs)
 model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
 
 callbacks = [
-        tf.keras.callbacks.EarlyStopping(patience=3, monitor='val_loss'),
+        tf.keras.callbacks.EarlyStopping(patience=5, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs'),
         history_logger,
         model_checkpoint_callback
@@ -134,7 +134,7 @@ model.compile(optimizer = Adam(lr = 1e-4), loss = dice_loss, metrics = ['accurac
 
 
 # O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA   
-history = model.fit(X, y, validation_data=(X_v,y_v), batch_size=6, epochs=5, callbacks=callbacks)
+history = model.fit(X, y, validation_data=(X_v,y_v), batch_size=6, epochs=35, callbacks=callbacks)
 
 # validation_data=(X_v,y_v)
 
