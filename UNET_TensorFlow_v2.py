@@ -13,9 +13,11 @@ import numpy as np
 from keras.models import *
 from keras.layers import *
 from keras.optimizers import *
-from keras.callbacks import ModelCheckpoint, LearningRateScheduler
+from keras.callbacks import ModelCheckpoint, LearningRateScheduler,CSVLogger
 from keras import backend as keras
 from keras.backend import epsilon
+
+NAME_MODEL = 'test_history'
 
 IMG_HEIGHT = 256
 IMG_WIDTH= 256
@@ -35,11 +37,14 @@ num_classes = 1
 #     # Virtual devices must be set before GPUs have been initialized
 #     print(e)
 
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-recortado','Children_NoPolip','sessile-main-Kvasir-SEG','Kvasir-SEG'],0.05)
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB',
+                                                                #   'Kvasir-recortado','Children_NoPolip','sessile-main-Kvasir-SEG','Kvasir-SEG'
+                                                                  ],0.05)
 X = get_files(images_train,type_of_file='image')
 y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
 y_v = get_files(masks_test,type_of_file='mask')
+history_logger=tf.keras.callbacks.CSVLogger("./history/{}.csv".format(NAME_MODEL), separator=",", append=True)
 
 inputs = tf.keras.layers.Input((IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS))
 
@@ -110,7 +115,9 @@ model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
 
 callbacks = [
         tf.keras.callbacks.EarlyStopping(patience=3, monitor='val_loss'),
-        tf.keras.callbacks.TensorBoard(log_dir='logs')
+        tf.keras.callbacks.TensorBoard(log_dir='logs'),
+        # tf.keras.callbacks.History(),
+        history_logger
         ]
 
 
@@ -120,12 +127,14 @@ model.compile(optimizer = Adam(lr = 1e-4), loss = dice_loss, metrics = ['accurac
 
 
 # O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA
-model.fit(X, y, validation_data=(X_v,y_v), batch_size=6, epochs=35)
+history = model.fit(X, y, validation_data=(X_v,y_v), batch_size=6, epochs=4)
 
 # validation_data=(X_v,y_v)
 
 print(model.summary())
+print(history)
 
-model.save('./models/tryout_v1.h5')
+model.save("./models/{}.h5".format(NAME_MODEL))
+np.save('./history/{}.npy'.format(NAME_MODEL),history.history)
 print('Model Saved!')
 
