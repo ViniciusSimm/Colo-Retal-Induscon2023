@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 from keras.backend import epsilon
+import matplotlib.pyplot as plt
 
 def score_ssim(arrays_predict,arrays_mask):
     ssim = tf.image.ssim(arrays_mask, arrays_predict, max_val=1.0)
@@ -144,3 +145,25 @@ class ThresholdLayer(tf.keras.layers.Layer):
 
     def compute_output_shape(self, input_shape):
         return input_shape
+
+class GetHistory():
+    def __init__(self, df):
+        self.df = df
+    
+    def accuracy_vs_val_accuracy(self):
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.plot(self.df['epoch'], self.df['accuracy'], label='accuracy')
+        ax.plot(self.df['epoch'], self.df['val_accuracy'], label='val_accuracy')
+        ax.set_title('Accuracy vs Val_accuracy')
+        ax.legend()
+        plt.show()
+        
+    def loss_vs_val_loss(self):
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.plot(self.df['epoch'], self.df['loss'], label='loss')
+        ax.plot(self.df['epoch'], self.df['val_loss'], label='val_loss')
+        ax.set_title('Loss vs Val_loss')
+        ax.legend()
+        plt.show()

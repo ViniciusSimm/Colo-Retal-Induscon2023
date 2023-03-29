@@ -7,8 +7,11 @@ from matplotlib import pyplot as plt
 #######################################################
 FOLDER = 'CVC-ClinicDB'
 FILE = '600.jpg'
-MODEL_NAME = 'tryout_v1.h5'
+MODEL_NAME = 'test_checkpoint'
 #######################################################
+
+model_name = '{}.h5'.format(MODEL_NAME)
+history_name = 'history/{}.csv'.format(MODEL_NAME)
 
 path_img = './datasets/{}/images/{}'.format(FOLDER,FILE)
 path_mask = './datasets/{}/masks/{}'.format(FOLDER,FILE)
@@ -18,7 +21,7 @@ path_mask = './datasets/{}/masks/{}'.format(FOLDER,FILE)
     # cv2.imshow(i,img)
 
 # LOAD MODEL
-model = tf.keras.models.load_model('./models/{}'.format(MODEL_NAME),custom_objects={'dice_loss':dice_loss,'ThresholdLayer': ThresholdLayer})
+model = tf.keras.models.load_model('./models/{}'.format(model_name),custom_objects={'dice_loss':dice_loss,'ThresholdLayer': ThresholdLayer})
 
 array = get_files([path_img],type_of_file='image')
 prediction = model.predict(array)
@@ -27,6 +30,12 @@ binario = np.where(prediction > 0.5, 1, 0)
 
 plt.imshow(binario[0], interpolation='nearest')
 plt.show()
+
+history_table = pd.read_csv(history_name)
+history_class = GetHistory(history_table)
+history_class.accuracy_vs_val_accuracy()
+history_class.loss_vs_val_loss()
+
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

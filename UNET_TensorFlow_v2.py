@@ -17,12 +17,20 @@ from keras.callbacks import ModelCheckpoint, LearningRateScheduler,CSVLogger
 from keras import backend as keras
 from keras.backend import epsilon
 
+
+# PARAMETERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 NAME_MODEL = 'test_checkpoint'
 
 IMG_HEIGHT = 256
 IMG_WIDTH= 256
 IMG_CHANNELS = 3
 num_classes = 1
+
+# PARAMETERS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+# LIMIT GPU >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # gpus = tf.config.list_physical_devices('GPU')
 # if gpus:
@@ -37,21 +45,25 @@ num_classes = 1
 #     # Virtual devices must be set before GPUs have been initialized
 #     print(e)
 
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB',
-                                                                  'Kvasir-recortado','Children_NoPolip','sessile-main-Kvasir-SEG','Kvasir-SEG'
-                                                                  ],0.1)
+# LIMIT GPU <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+# LOAD DATA >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+model_path = "./models/{}.h5".format(NAME_MODEL)
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-recortado','Children_NoPolip',
+                                                                  'sessile-main-Kvasir-SEG','Kvasir-SEG'],0.1)
+
 X = get_files(images_train,type_of_file='image')
 y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
 y_v = get_files(masks_test,type_of_file='mask')
-history_logger=tf.keras.callbacks.CSVLogger("./history/{}.csv".format(NAME_MODEL), separator=",", append=True)
-model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-    filepath='./tmp/checkpoint',
-    save_weights_only=True,
-    monitor='val_loss',
-    mode='min',
-    save_best_only=True)
 
+
+# LOAD DATA <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+# LAYERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 inputs = tf.keras.layers.Input((IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS))
 
@@ -118,32 +130,55 @@ outputs = tf.keras.layers.Conv2D(num_classes, (1, 1), activation='sigmoid')(u9)
 # outputs = tf.keras.layers.Lambda(apply_threshold)(outputs)
 outputs = ThresholdLayer()(outputs)
 
-model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
+# LAYERS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+# CALLBACKS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+history_logger=tf.keras.callbacks.CSVLogger("./history/{}.csv".format(NAME_MODEL), separator=",", append=True)
+
+model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+    filepath='./tmp/checkpoint',
+    save_weights_only=True,
+    monitor='val_loss',
+    mode='min',
+    save_best_only=True)
 
 callbacks = [
         tf.keras.callbacks.EarlyStopping(patience=5, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs'),
         history_logger,
-        model_checkpoint_callback
-        ]
+        model_checkpoint_callback]
+
+# CALLBACKS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-# model.compile(optimizer = Adam(lr = 1e-4), loss = focal_loss(alpha=0.25, gamma=6.0), metrics = ['accuracy'])
-model.compile(optimizer = Adam(lr = 1e-4), loss = dice_loss, metrics = ['accuracy'])
-# model.compile(optimizer = Adam(lr = 1e-4), loss = 'binary_crossentropy', metrics = ['accuracy'])
+# CREATE OR LOAD MODEL >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+if os.path.isfile(model_path):
+    model = tf.keras.models.load_model(model_path)
+else:
+    model = tf.keras.Model(inputs=[inputs], outputs=[outputs])
+    model.compile(optimizer = Adam(lr = 1e-4), loss = dice_loss, metrics = ['accuracy'])
+
+# CREATE OR LOAD MODEL <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-# O BATCH PODE SER AJUSTADO PARA LIMITAÇÃO DE MEMORIA   
+# TRAIN >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 history = model.fit(X, y, validation_data=(X_v,y_v), batch_size=6, epochs=35, callbacks=callbacks)
 
-# validation_data=(X_v,y_v)
+# TRAIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+# SAVE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 model.load_weights('./tmp/checkpoint')
 print(model.summary())
 print(history)
 
-model.save("./models/{}.h5".format(NAME_MODEL))
-np.save('./history/{}.npy'.format(NAME_MODEL),history.history)
+model.save(model_path)
+# np.save('./history/{}.npy'.format(NAME_MODEL),history.history)
 print('Model Saved!')
 
+# SAVE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
