@@ -153,8 +153,8 @@ class GetHistory():
     def accuracy_vs_val_accuracy(self):
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.plot(self.df['epoch'], self.df['accuracy'], label='accuracy')
-        ax.plot(self.df['epoch'], self.df['val_accuracy'], label='val_accuracy')
+        ax.plot(self.df.index, self.df['accuracy'], label='accuracy')
+        ax.plot(self.df.index, self.df['val_accuracy'], label='val_accuracy')
         ax.set_title('Accuracy vs Val_accuracy')
         ax.legend()
         plt.show()
@@ -162,8 +162,8 @@ class GetHistory():
     def loss_vs_val_loss(self):
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.plot(self.df['epoch'], self.df['loss'], label='loss')
-        ax.plot(self.df['epoch'], self.df['val_loss'], label='val_loss')
+        ax.plot(self.df.index, self.df['loss'], label='loss')
+        ax.plot(self.df.index, self.df['val_loss'], label='val_loss')
         ax.set_title('Loss vs Val_loss')
         ax.legend()
         plt.show()

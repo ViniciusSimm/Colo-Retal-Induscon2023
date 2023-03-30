@@ -1,5 +1,9 @@
 Instruções:
 
+O arquivo responsável por treinar novos modelos é o UNET_TensorFlow_v2.py.
+Caso o nome designado ao modelo esteja sendo usado na pasta "models", este será carregado para continuar o treinamento.
+O histórico de cada modelo será arquivado na pasta "history" e terá o mesmo nome do modelo.
+
 Os modelos devem ser armazenados na pasta "datasets":
 - As imagens originais devem permanecer na pasta "images"
 - As mascaras devem permanecer na pasta "masks"
