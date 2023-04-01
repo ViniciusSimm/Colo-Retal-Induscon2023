@@ -27,7 +27,7 @@ IMG_WIDTH= 256
 IMG_CHANNELS = 3
 num_classes = 1
 
-EPOCHS = 4
+EPOCHS = 8
 BATCH_SIZE = 4
 
 # PARAMETERS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -54,13 +54,19 @@ BATCH_SIZE = 4
 # LOAD DATA >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 model_path = "./models/{}.h5".format(NAME_MODEL)
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-recortado','Children_NoPolip',
-                                                                  'sessile-main-Kvasir-SEG','Kvasir-SEG'],0.1)
+images_train, images_test, masks_train, masks_test = get_folders([
+                                                                #   'CVC-ClinicDB',
+                                                                  'Kvasir-recortado',
+                                                                  'Children_NoPolip',
+                                                                #   'sessile-main-Kvasir-SEG',
+                                                                  'Kvasir-SEG'
+                                                                  ],0.1)
 
 X = get_files(images_train,type_of_file='image')
 y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
 y_v = get_files(masks_test,type_of_file='mask')
+
 
 dataset_train = tf.data.Dataset.from_tensor_slices((X, y))
 dataset_val = tf.data.Dataset.from_tensor_slices((X_v, y_v))
