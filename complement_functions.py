@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 import tensorflow as tf
 from keras.backend import epsilon
 import matplotlib.pyplot as plt
+import re
 
 def score_ssim(arrays_predict,arrays_mask):
     ssim = tf.image.ssim(arrays_mask, arrays_predict, max_val=1.0)
@@ -54,6 +55,28 @@ def get_files(paths,type_of_file='image'):
         all_images.append(img)
     arrays = np.array(all_images)
     return arrays
+
+def image_mask_generator(image_paths, mask_paths, batch_size):
+    num_samples = len(image_paths)
+    while True:
+        indices = np.random.choice(num_samples, batch_size)
+        batch_images = []
+        batch_masks = []
+        for i in indices:
+            img = cv2.imread(image_paths[i])
+            img = img.astype('float32') / 255.0
+            img = np.array(img)
+            # image = np.array(Image.open(image_paths[i]))
+
+            mask = cv2.imread(mask_paths[i], cv2.IMREAD_GRAYSCALE)
+            mask = mask.astype('float32') / 255.0
+            _, mask = cv2.threshold(mask, 0.5, 1.0, cv2.THRESH_BINARY)
+            mask = np.array(mask)
+            # mask = np.array(Image.open(mask_paths[i]))
+            
+            batch_images.append(img)
+            batch_masks.append(mask)
+        yield np.array(batch_images), np.array(batch_masks)
 
 def get_folders(list_folders,test_size):
 

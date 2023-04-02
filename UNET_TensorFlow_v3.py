@@ -20,15 +20,16 @@ from keras.backend import epsilon
 
 # PARAMETERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-NAME_MODEL = 'unet_model_batches_test'
+NAME_MODEL = 'test'
 
 IMG_HEIGHT = 256
 IMG_WIDTH= 256
 IMG_CHANNELS = 3
 num_classes = 1
 
-EPOCHS = 8
-BATCH_SIZE = 4
+EPOCHS = 15
+BATCH_SIZE = 32
+STEPS_PER_EPOCH = 80
 
 # PARAMETERS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -54,25 +55,15 @@ BATCH_SIZE = 4
 # LOAD DATA >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 model_path = "./models/{}.h5".format(NAME_MODEL)
-images_train, images_test, masks_train, masks_test = get_folders([
-                                                                #   'CVC-ClinicDB',
-                                                                  'Kvasir-recortado',
-                                                                  'Children_NoPolip',
-                                                                #   'sessile-main-Kvasir-SEG',
-                                                                  'Kvasir-SEG'
-                                                                  ],0.1)
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-recortado','Children_NoPolip',
+                                                                  'sessile-main-Kvasir-SEG','Kvasir-SEG'],0.1)
 
-X = get_files(images_train,type_of_file='image')
-y = get_files(masks_train,type_of_file='mask')
+# X = get_files(images_train,type_of_file='image')
+# y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
 y_v = get_files(masks_test,type_of_file='mask')
 
 
-dataset_train = tf.data.Dataset.from_tensor_slices((X, y))
-dataset_val = tf.data.Dataset.from_tensor_slices((X_v, y_v))
-
-dataset_train = dataset_train.shuffle(buffer_size=len(X)).batch(BATCH_SIZE)
-dataset_val = dataset_val.batch(BATCH_SIZE)
 
 # LOAD DATA <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -183,7 +174,9 @@ else:
 # TRAIN >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # history = model.fit(X, y, validation_data=(X_v,y_v), batch_size=BATCH_SIZE, epochs=EPOCHS, callbacks=callbacks)
-history = model.fit(dataset_train, epochs=EPOCHS, validation_data=dataset_val, callbacks=callbacks)
+history = model.fit(image_mask_generator(images_train, masks_train, BATCH_SIZE), validation_data=(X_v,y_v),
+                     epochs=EPOCHS, steps_per_epoch=STEPS_PER_EPOCH, callbacks=callbacks)
+
 
 # TRAIN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
