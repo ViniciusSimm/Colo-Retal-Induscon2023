@@ -5,9 +5,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 #######################################################
-FOLDER = 'Kvasir-recortado'
-FILE = 'cju0qkwl35piu0993l0dewei2.jpg'
-MODEL_NAME = 'unet_model_v1'
+FOLDER = 'Children_NoPolip'
+FILE = '1998.jpg'
+MODEL_NAME = 'test'
 #######################################################
 
 model_name = '{}.h5'.format(MODEL_NAME)

@@ -1,6 +1,6 @@
 Instruções:
 
-O arquivo responsável por treinar novos modelos é o UNET_TensorFlow_v2.py.
+O arquivo responsável por treinar novos modelos é o UNET_TensorFlow_v3.py. Este modelo está otimizado para não consumir muita memória RAM.
 Caso o nome designado ao modelo esteja sendo usado na pasta "models", este será carregado para continuar o treinamento.
 O histórico de cada modelo será arquivado na pasta "history" e terá o mesmo nome do modelo.
 

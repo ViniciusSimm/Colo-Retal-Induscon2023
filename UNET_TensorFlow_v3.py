@@ -20,16 +20,18 @@ from keras.backend import epsilon
 
 # PARAMETERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-NAME_MODEL = 'test'
+NAME_MODEL = 'test2'
 
 IMG_HEIGHT = 256
 IMG_WIDTH= 256
 IMG_CHANNELS = 3
 num_classes = 1
 
-EPOCHS = 15
-BATCH_SIZE = 32
-STEPS_PER_EPOCH = 80
+EPOCHS = 25
+BATCH_SIZE = 16
+
+# Não ultrapassar o valor de num_treino / batch_size 
+STEPS_PER_EPOCH = 100
 
 # PARAMETERS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -56,7 +58,7 @@ STEPS_PER_EPOCH = 80
 
 model_path = "./models/{}.h5".format(NAME_MODEL)
 images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-recortado','Children_NoPolip',
-                                                                  'sessile-main-Kvasir-SEG','Kvasir-SEG'],0.1)
+                                                                  'sessile-main-Kvasir-SEG','Kvasir-SEG'],0.2)
 
 # X = get_files(images_train,type_of_file='image')
 # y = get_files(masks_train,type_of_file='mask')
