@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 #######################################################
 FOLDER = 'CVC-ClinicDB'
 FILES = ['500.jpg']
-MODEL_NAME = 'unet_model_batches_test.h5'
+MODEL_NAME = 'test2.h5'
 #######################################################
 
 model = tf.keras.models.load_model('./models/{}'.format(MODEL_NAME),custom_objects={'dice_loss':dice_loss,'ThresholdLayer': ThresholdLayer})

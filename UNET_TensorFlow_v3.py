@@ -20,14 +20,14 @@ from keras.backend import epsilon
 
 # PARAMETERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-NAME_MODEL = 'test2'
+NAME_MODEL = 'model_dice_loss_v1'
 
 IMG_HEIGHT = 256
 IMG_WIDTH= 256
 IMG_CHANNELS = 3
 num_classes = 1
 
-EPOCHS = 25
+EPOCHS = 30
 BATCH_SIZE = 16
 
 # Não ultrapassar o valor de num_treino / batch_size 
@@ -57,7 +57,7 @@ STEPS_PER_EPOCH = 100
 # LOAD DATA >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 model_path = "./models/{}.h5".format(NAME_MODEL)
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-recortado','Children_NoPolip',
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-recortado',
                                                                   'sessile-main-Kvasir-SEG','Kvasir-SEG'],0.2)
 
 # X = get_files(images_train,type_of_file='image')
@@ -152,7 +152,7 @@ model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
     save_best_only=True)
 
 callbacks = [
-        tf.keras.callbacks.EarlyStopping(patience=5, monitor='val_loss'),
+        # tf.keras.callbacks.EarlyStopping(patience=8, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs'),
         history_logger,
         model_checkpoint_callback]
