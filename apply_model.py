@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 
 #######################################################
 FOLDER = 'TEST_IMAGES'
-FILE = 'cju2hqt33lmra0988fr5ijv8j_kev.jpg'
+FILE = 'cju7afqon1ip40850ue2308b6_rec.jpg'
 MODEL_NAME = 'model_dice_loss_v1'
 #######################################################
 
@@ -35,7 +35,6 @@ plt.show()
 # history_class = GetHistory(history_table)
 # history_class.accuracy_vs_val_accuracy()
 # history_class.loss_vs_val_loss()
-
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()

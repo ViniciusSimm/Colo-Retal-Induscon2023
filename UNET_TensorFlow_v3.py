@@ -27,11 +27,11 @@ IMG_WIDTH= 256
 IMG_CHANNELS = 3
 num_classes = 1
 
-EPOCHS = 30
-BATCH_SIZE = 16
+EPOCHS = 15
+BATCH_SIZE = 32
 
 # Não ultrapassar o valor de num_treino / batch_size 
-STEPS_PER_EPOCH = 100
+STEPS_PER_EPOCH = 50
 
 # PARAMETERS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
