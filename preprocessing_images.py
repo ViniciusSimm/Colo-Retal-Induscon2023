@@ -39,8 +39,8 @@ for i,m in zip(images,masks):
     pretrained_image = adjust_image(path_file_image)
     mask = cv2.imread(path_file_mask)
 
-    path_file_image_after = str(MAIN_DATASET_PATH + 'pretrained' + '/' + FOLDER + '/' + 'images' + '/' + i)
-    path_file_mask_after = str(MAIN_DATASET_PATH + 'pretrained' + '/' + FOLDER + '/' + 'masks' + '/' + m)
+    path_file_image_after = str(MAIN_DATASET_PATH + 'preprocessed' + '/' + FOLDER + '/' + 'images' + '/' + i)
+    path_file_mask_after = str(MAIN_DATASET_PATH + 'preprocessed' + '/' + FOLDER + '/' + 'masks' + '/' + m)
     
     os.makedirs(os.path.dirname(path_file_image_after), exist_ok=True)
     os.makedirs(os.path.dirname(path_file_mask_after), exist_ok=True)

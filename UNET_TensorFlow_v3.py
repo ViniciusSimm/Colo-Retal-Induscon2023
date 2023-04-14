@@ -20,7 +20,7 @@ from keras.backend import epsilon
 
 # PARAMETERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-NAME_MODEL = 'model_dice_loss_v1'
+NAME_MODEL = 'model_dice_loss_preprocessed_v1'
 
 IMG_HEIGHT = 256
 IMG_WIDTH= 256
@@ -57,8 +57,8 @@ STEPS_PER_EPOCH = 50
 # LOAD DATA >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 model_path = "./models/{}.h5".format(NAME_MODEL)
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB','Kvasir-recortado',
-                                                                  'sessile-main-Kvasir-SEG','Kvasir-SEG'],0.2)
+images_train, images_test, masks_train, masks_test = get_folders(['preprocessed/CVC-ClinicDB','preprocessed/Kvasir-recortado',
+                                                                  'preprocessed/sessile-main-Kvasir-SEG','preprocessed/Kvasir-SEG'],0.2)
 
 # X = get_files(images_train,type_of_file='image')
 # y = get_files(masks_train,type_of_file='mask')
