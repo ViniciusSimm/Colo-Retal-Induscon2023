@@ -5,9 +5,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 #######################################################
-FOLDER = 'TEST_IMAGES'
-FILE = '419_cvc.jpg'
-MODEL_NAME = 'model_dice_loss_preprocessed_v1'
+FOLDER = 'preprocessed/TEST_IMAGES'
+FILE = '133_cvc.jpg'
+MODEL_NAME = 'model_dice_loss_preprocessed_without_cropped_v1'
 #######################################################
 
 model_name = '{}.h5'.format(MODEL_NAME)
