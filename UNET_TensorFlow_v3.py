@@ -58,15 +58,12 @@ STEPS_PER_EPOCH = 50
 
 model_path = "./models/{}.h5".format(NAME_MODEL)
 images_train, images_test, masks_train, masks_test = get_folders(['preprocessed/CVC-ClinicDB',
-                                                                  'preprocessed/sessile-main-Kvasir-SEG',
                                                                   'preprocessed/Kvasir-SEG'],0.2)
 
 # X = get_files(images_train,type_of_file='image')
 # y = get_files(masks_train,type_of_file='mask')
 X_v = get_files(images_test,type_of_file='image')
 y_v = get_files(masks_test,type_of_file='mask')
-
-
 
 # LOAD DATA <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

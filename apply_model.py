@@ -5,9 +5,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 #######################################################
-FOLDER = 'preprocessed/TEST_IMAGES'
+FOLDER = 'TEST_IMAGES'
 FILE = '133_cvc.jpg'
-MODEL_NAME = 'model_dice_loss_preprocessed_without_cropped_v1'
+MODEL_NAME = 'model_dice_loss_v1_b4'
 #######################################################
 
 model_name = '{}.h5'.format(MODEL_NAME)
@@ -27,6 +27,8 @@ array = get_files([path_img],type_of_file='image')
 prediction = model.predict(array)
 
 binario = np.where(prediction > 0.5, 1, 0)
+kernel = np.ones((5,5),np.uint8)
+binario = cv2.morphologyEx(binario, cv2.MORPH_OPEN, kernel)
 
 plt.imshow(binario[0], interpolation='nearest')
 plt.show()
