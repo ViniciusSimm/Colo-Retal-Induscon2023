@@ -153,7 +153,7 @@ model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
     save_best_only=True)
 
 callbacks = [
-        tf.keras.callbacks.EarlyStopping(patience=12, monitor='val_loss'),
+        tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs'),
         history_logger,
         model_checkpoint_callback]
