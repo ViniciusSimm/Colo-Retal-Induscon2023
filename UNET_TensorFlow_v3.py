@@ -27,7 +27,7 @@ IMG_WIDTH= 256
 IMG_CHANNELS = 3
 num_classes = 1
 
-EPOCHS = 15
+EPOCHS = 25
 BATCH_SIZE = 32
 
 # Não ultrapassar o valor de num_treino / batch_size 
@@ -152,7 +152,7 @@ model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
     save_best_only=True)
 
 callbacks = [
-        # tf.keras.callbacks.EarlyStopping(patience=8, monitor='val_loss'),
+        tf.keras.callbacks.EarlyStopping(patience=12, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs'),
         history_logger,
         model_checkpoint_callback]

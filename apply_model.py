@@ -6,8 +6,8 @@ from matplotlib import pyplot as plt
 
 #######################################################
 FOLDER = 'TEST_IMAGES'
-FILE = 'cju7afqon1ip40850ue2308b6_rec.jpg'
-MODEL_NAME = 'model_dice_loss_v1'
+FILE = '419_cvc.jpg'
+MODEL_NAME = 'model_dice_loss_preprocessed_v1'
 #######################################################
 
 model_name = '{}.h5'.format(MODEL_NAME)
