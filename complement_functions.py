@@ -181,6 +181,7 @@ class GetHistory():
         ax.set_title('Accuracy vs Val_accuracy')
         ax.legend()
         plt.show()
+        return fig
         
     def loss_vs_val_loss(self):
         fig = plt.figure()
@@ -190,3 +191,4 @@ class GetHistory():
         ax.set_title('Loss vs Val_loss')
         ax.legend()
         plt.show()
+        return fig

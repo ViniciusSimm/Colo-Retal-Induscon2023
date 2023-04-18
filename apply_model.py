@@ -27,7 +27,7 @@ array = get_files([path_img],type_of_file='image')
 prediction = model.predict(array)
 
 binario = np.where(prediction > 0.5, 1, 0)
-kernel = np.ones((5,5),np.uint8)
+# kernel = np.ones((5,5),np.uint8)
 # binario = cv2.morphologyEx(binario, cv2.MORPH_OPEN, kernel)
 
 plt.imshow(binario[0], interpolation='nearest')

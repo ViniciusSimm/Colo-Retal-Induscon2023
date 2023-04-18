@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 #######################################################
 FOLDER = 'TEST_IMAGES'
 FILES = ['133_cvc.jpg','419_cvc.jpg','480_cvc.jpg','cju1cfhyg48bb0799cl5pr2jh_kev.jpg','cju2hqt33lmra0988fr5ijv8j_kev.jpg']
-MODEL_NAME = 'model_dice_loss_v1.h5'
+MODEL_NAME = 'UNET_with_preprocess_no_crop_v5.h5'
 #######################################################
 
 model = tf.keras.models.load_model('./models/{}'.format(MODEL_NAME),custom_objects={'dice_loss':dice_loss,'ThresholdLayer': ThresholdLayer})
