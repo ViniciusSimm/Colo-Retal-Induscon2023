@@ -36,6 +36,9 @@ if len(arrays_mask.shape) < 4:
     arrays_mask = tf.expand_dims(arrays_mask, axis=-1)  # [batch_size, height, width, 1]
     arrays_mask = tf.repeat(arrays_mask, repeats=1, axis=-1)  # [batch_size, height, width, channels]
 
+print(arrays_mask.shape)
+print(arrays_predict.shape)
+
 ssim = score_ssim(arrays_predict,arrays_mask)
 print('SSIM:', ssim)
 mse = score_mse(arrays_predict,arrays_mask)

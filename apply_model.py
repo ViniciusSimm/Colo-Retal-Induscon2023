@@ -5,9 +5,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 #######################################################
-FOLDER = 'preprocessed/TEST_IMAGES'
-FILE = 'cju1cfhyg48bb0799cl5pr2jh_kev.jpg'
-MODEL_NAME = 'UNET_with_preprocess_no_crop'
+FOLDER = 'TEST_IMAGES'
+FILE = '133_cvc.jpg'
+MODEL_NAME = 'UNET_no_preprocess_with_crop_v3'
 #######################################################
 
 model_name = '{}.h5'.format(MODEL_NAME)
@@ -27,11 +27,39 @@ array = get_files([path_img],type_of_file='image')
 prediction = model.predict(array)
 
 binario = np.where(prediction > 0.5, 1, 0)
+print(binario.shape)
+
+
+
+# plt.imshow(binario[0], interpolation='nearest')
+# plt.show()
+
+imagem_binaria = binario[0]
+
+# Converte a imagem binária para o tipo de dados uint8
+imagem_binaria = (imagem_binaria * 255).astype(np.uint8)
+
+# Define o kernel (elemento estruturante) para a operação de fechamento
+kernel = np.ones((5,5), np.uint8)
+
+# Aplica a operação de fechamento
+fechamento = cv2.morphologyEx(imagem_binaria, cv2.MORPH_OPEN, kernel)
+
+# Exibe a imagem original e a imagem após o fechamento morfológico
+plt.subplot(1, 2, 1)
+plt.imshow(imagem_binaria, cmap='gray')
+plt.title('Imagem binária original')
+
+plt.subplot(1, 2, 2)
+plt.imshow(fechamento, cmap='gray')
+plt.title('Imagem após o fechamento morfológico')
+
+plt.show()
+
+
+
 # kernel = np.ones((5,5),np.uint8)
 # binario = cv2.morphologyEx(binario, cv2.MORPH_OPEN, kernel)
-
-plt.imshow(binario[0], interpolation='nearest')
-plt.show()
 
 # history_table = pd.read_csv(history_name)
 # history_class = GetHistory(history_table)

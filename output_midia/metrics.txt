@@ -6,3 +6,27 @@ euclidean: 91.71695590238481
 precision: 0.8629443730036919
 recall: 0.9584427551255471
 
+MODEL: UNET_with_preprocess_no_crop_v5
+FILES: ['133_cvc.jpg', '419_cvc.jpg', '480_cvc.jpg', 'cju1cfhyg48bb0799cl5pr2jh_kev.jpg', 'cju2hqt33lmra0988fr5ijv8j_kev.jpg']
+ssim: 0.9032353162765503
+jaccard: 0.7297371572149265
+euclidean: 117.33712115098103
+precision: 0.8314880672795186
+recall: 0.8563892280402682
+
+MODEL: UNET_with_preprocess_no_crop_v5
+FILES: ['133_cvc.jpg', '419_cvc.jpg', '480_cvc.jpg', 'cju1cfhyg48bb0799cl5pr2jh_kev.jpg', 'cju2hqt33lmra0988fr5ijv8j_kev.jpg']
+ssim: 0.9032353162765503
+jaccard: 0.7297371572149265
+euclidean: 117.33712115098103
+precision: 0.8314880672795186
+recall: 0.8563892280402682
+
+MODEL: UNET_with_preprocess_no_crop_v5
+FILES: ['133_cvc.jpg', '419_cvc.jpg', '480_cvc.jpg', 'cju1cfhyg48bb0799cl5pr2jh_kev.jpg', 'cju2hqt33lmra0988fr5ijv8j_kev.jpg']
+ssim: 0.9032353162765503
+jaccard: 0.7297371572149265
+euclidean: 117.33712115098103
+precision: 0.8314880672795186
+recall: 0.8563892280402682
+
