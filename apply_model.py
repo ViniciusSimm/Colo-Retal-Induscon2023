@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 #######################################################
 FOLDER = 'TEST_IMAGES'
 FILE = '133_cvc.jpg'
-MODEL_NAME = 'model_dice_loss_v1_b4'
+MODEL_NAME = 'UNET_no_preprocess_with_crop'
 #######################################################
 
 model_name = '{}.h5'.format(MODEL_NAME)
@@ -28,7 +28,7 @@ prediction = model.predict(array)
 
 binario = np.where(prediction > 0.5, 1, 0)
 kernel = np.ones((5,5),np.uint8)
-binario = cv2.morphologyEx(binario, cv2.MORPH_OPEN, kernel)
+# binario = cv2.morphologyEx(binario, cv2.MORPH_OPEN, kernel)
 
 plt.imshow(binario[0], interpolation='nearest')
 plt.show()

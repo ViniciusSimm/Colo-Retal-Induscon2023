@@ -20,14 +20,14 @@ from keras.backend import epsilon
 
 # PARAMETERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-NAME_MODEL = 'model_dice_loss_preprocessed_without_cropped_v1'
+NAME_MODEL = 'UNET_no_preprocess_with_crop'
 
 IMG_HEIGHT = 256
 IMG_WIDTH= 256
 IMG_CHANNELS = 3
 num_classes = 1
 
-EPOCHS = 20
+EPOCHS = 50
 BATCH_SIZE = 32
 
 # Não ultrapassar o valor de num_treino / batch_size 
@@ -57,8 +57,9 @@ STEPS_PER_EPOCH = 50
 # LOAD DATA >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 model_path = "./models/{}.h5".format(NAME_MODEL)
-images_train, images_test, masks_train, masks_test = get_folders(['preprocessed/CVC-ClinicDB',
-                                                                  'preprocessed/Kvasir-SEG'],0.2)
+images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB',
+                                                                  'Kvasir-SEG',
+                                                                  'Kvasir-recortado'],0.2)
 
 # X = get_files(images_train,type_of_file='image')
 # y = get_files(masks_train,type_of_file='mask')
@@ -150,7 +151,7 @@ model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
     save_best_only=True)
 
 callbacks = [
-        tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_loss'),
+        # tf.keras.callbacks.EarlyStopping(patience=12, monitor='val_loss'),
         tf.keras.callbacks.TensorBoard(log_dir='logs'),
         history_logger,
         model_checkpoint_callback]
