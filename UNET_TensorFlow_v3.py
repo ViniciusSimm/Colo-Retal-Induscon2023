@@ -20,14 +20,14 @@ from keras.backend import epsilon
 
 # PARAMETERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-NAME_MODEL = 'UNET_no_preprocess_with_crop'
+NAME_MODEL = 'UNET_with_preprocess_no_crop'
 
 IMG_HEIGHT = 256
 IMG_WIDTH= 256
 IMG_CHANNELS = 3
 num_classes = 1
 
-EPOCHS = 50
+EPOCHS = 20
 BATCH_SIZE = 32
 
 # Não ultrapassar o valor de num_treino / batch_size 
@@ -57,9 +57,8 @@ STEPS_PER_EPOCH = 50
 # LOAD DATA >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 model_path = "./models/{}.h5".format(NAME_MODEL)
-images_train, images_test, masks_train, masks_test = get_folders(['CVC-ClinicDB',
-                                                                  'Kvasir-SEG',
-                                                                  'Kvasir-recortado'],0.2)
+images_train, images_test, masks_train, masks_test = get_folders(['preprocessed/CVC-ClinicDB',
+                                                                  'preprocessed/Kvasir-SEG'],0.2)
 
 # X = get_files(images_train,type_of_file='image')
 # y = get_files(masks_train,type_of_file='mask')
