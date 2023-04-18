@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 
 #######################################################
 FOLDER = 'preprocessed/TEST_IMAGES'
-FILE = '133_cvc.jpg'
+FILE = 'cju1cfhyg48bb0799cl5pr2jh_kev.jpg'
 MODEL_NAME = 'UNET_with_preprocess_no_crop'
 #######################################################
 
