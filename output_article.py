@@ -39,7 +39,8 @@ class EvaluateModel:
         return paths, paths_mask
     
     def apply_posprocessing(self,mask):
-        mask = (mask * 255).astype(np.uint8)
+        # mask = (mask * 255).astype(np.uint8)
+        mask = (mask).astype(np.uint8)
         kernel = np.ones((5,5), np.uint8)
         filtered = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
         
@@ -118,10 +119,10 @@ if __name__ == "__main__":
     print('inicio')
     FOLDER = 'preprocessed/TEST_IMAGES'
     FILES = ['133_cvc.jpg','419_cvc.jpg','480_cvc.jpg','cju1cfhyg48bb0799cl5pr2jh_kev.jpg']
-    MODEL_NAME = 'UNET_with_preprocess_no_crop_v5'
+    MODEL_NAME = 'UNET_no_preprocess_with_crop_v3'
     evaluatemodel = EvaluateModel(FOLDER, FILES, MODEL_NAME,
                                   posprocessing=True)
-    evaluatemodel.save_history()
-    evaluatemodel.save_masks()
+    # evaluatemodel.save_history()
+    # evaluatemodel.save_masks()
     evaluatemodel.get_performance()
     print('fim')
