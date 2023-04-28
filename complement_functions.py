@@ -176,9 +176,16 @@ class GetHistory():
     def accuracy_vs_val_accuracy(self):
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.plot(self.df.index, self.df['accuracy'], label='accuracy')
-        ax.plot(self.df.index, self.df['val_accuracy'], label='val_accuracy')
-        ax.set_title('Accuracy vs Val_accuracy')
+        ax.plot(self.df.index, self.df['accuracy'], label='Train')
+        ax.plot(self.df.index, self.df['val_accuracy'], label='Validation')
+        ax.set_title('Train and Validation Accuracy',
+                     fontdict={'fontsize': 14, 'fontweight': 'bold'})
+        ax.set_xlabel('Epochs', fontdict={'fontsize': 12})
+        ax.set_ylabel('Accuracy', fontdict={'fontsize': 12})
+        colors = ['#1a3cad', '#ff0e26']
+        for i, line in enumerate(ax.get_lines()):
+            line.set_color(colors[i])
+            line.set_linewidth(2.5)
         ax.legend()
         plt.show()
         return fig
@@ -186,9 +193,16 @@ class GetHistory():
     def loss_vs_val_loss(self):
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.plot(self.df.index, self.df['loss'], label='loss')
-        ax.plot(self.df.index, self.df['val_loss'], label='val_loss')
-        ax.set_title('Loss vs Val_loss')
+        ax.plot(self.df.index, self.df['loss'], label='Train')
+        ax.plot(self.df.index, self.df['val_loss'], label='Validation')
+        ax.set_title('Train and Validation Loss',
+                     fontdict={'fontsize': 14, 'fontweight': 'bold'})
+        ax.set_xlabel('Epochs', fontdict={'fontsize': 12})
+        ax.set_ylabel('Loss', fontdict={'fontsize': 12})
+        colors = ['#1a3cad', '#ff0e26']
+        for i, line in enumerate(ax.get_lines()):
+            line.set_color(colors[i])
+            line.set_linewidth(2.5)
         ax.legend()
         plt.show()
         return fig

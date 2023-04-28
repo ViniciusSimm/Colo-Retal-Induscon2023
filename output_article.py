@@ -60,10 +60,14 @@ class EvaluateModel:
             elif self.posprocessing == False:
                 output = binario[0]
                 final_token = ''
-            plt.imshow(output, interpolation='nearest')
-            plt.savefig("output_midia/{}_{}{}.png".format(re.search(r'[\\/]([\w-]+)\.jpg', path).group(1),
+            # cv2.imshow(output, interpolation='nearest')
+            cv2.imwrite("output_midia/{}_{}{}.png".format(re.search(r'[\\/]([\w-]+)\.jpg', path).group(1),
                                                           self.MODEL_NAME,
-                                                          final_token))
+                                                          final_token), output*255)
+            # plt.imshow(output, interpolation='nearest')
+            # plt.savefig("output_midia/{}_{}{}.png".format(re.search(r'[\\/]([\w-]+)\.jpg', path).group(1),
+            #                                               self.MODEL_NAME,
+            #                                               final_token))
 
     def get_performance(self):
         ssim = []
@@ -118,11 +122,13 @@ class EvaluateModel:
 if __name__ == "__main__":
     print('inicio')
     FOLDER = 'preprocessed/TEST_IMAGES'
+    # FILES = ['133_cvc.jpg']
+
     FILES = ['133_cvc.jpg','419_cvc.jpg','480_cvc.jpg','cju1cfhyg48bb0799cl5pr2jh_kev.jpg']
     MODEL_NAME = 'UNET_no_preprocess_with_crop_v3'
     evaluatemodel = EvaluateModel(FOLDER, FILES, MODEL_NAME,
-                                  posprocessing=True)
-    # evaluatemodel.save_history()
+                                  posprocessing=False)
+    evaluatemodel.save_history()
     # evaluatemodel.save_masks()
-    evaluatemodel.get_performance()
+    # evaluatemodel.get_performance()
     print('fim')
